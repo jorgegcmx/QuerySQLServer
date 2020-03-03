@@ -1,0 +1,83 @@
+SELECT    'DIESEL',
+           Acct, 
+           Sub, 
+		   ProjectID,
+		   TaskID, 
+		   SUM(DrAmt) AS Cargos,
+		   SUM(CrAmt) AS Abonos,
+		   MAX(PerPost) AS Perpost
+FROM       dbo.GLTran WITH (nolock)  
+WHERE     (Sub LIKE 'PEENGR%') 
+AND (Acct IN('11320325','11329005'))
+AND (Posted = 'P') 
+AND (CpnyID = 'AGQ') 
+AND TranDate BETWEEN '20200220' AND '20200303'
+GROUP BY   ProjectID, Sub, Acct, TaskID
+union
+SELECT     
+          'GASOLINA',
+           Acct, 
+           Sub, 
+		   ProjectID,
+		   TaskID, 
+		   SUM(DrAmt) AS Cargos,
+		   SUM(CrAmt) AS Abonos,
+		   MAX(PerPost) AS Perpost
+FROM       dbo.GLTran WITH (nolock)  
+WHERE     (Sub LIKE 'PEENGR%') 
+AND (Acct IN('11320329','11329004'))
+AND (Posted = 'P') 
+AND (CpnyID = 'AGQ')
+AND TranDate BETWEEN '20200220' AND '20200303'
+GROUP BY   ProjectID, Sub, Acct, TaskID
+union
+SELECT     
+          'ENERGIA ELECTRICA',
+           Acct, 
+           Sub, 
+		   ProjectID,
+		   TaskID, 
+		   SUM(DrAmt) AS Cargos,
+		   SUM(CrAmt) AS Abonos,
+		   MAX(PerPost) AS Perpost
+FROM       dbo.GLTran WITH (nolock)  
+WHERE     (Sub LIKE 'PEENGR%') 
+AND (Acct IN('11320401','11329002'))
+AND (Posted = 'P') 
+AND (CpnyID = 'AGQ')
+AND TranDate BETWEEN '20200220' AND '20200303'
+GROUP BY   ProjectID, Sub, Acct, TaskID
+union
+SELECT     
+          'ARRENDAMIENTO DE TERRENOS',
+           Acct, 
+           Sub, 
+		   ProjectID,
+		   TaskID, 
+		   SUM(DrAmt) AS Cargos,
+		   SUM(CrAmt) AS Abonos,
+		   MAX(PerPost) AS Perpost
+FROM       dbo.GLTran WITH (nolock)  
+WHERE     (Sub LIKE 'PEENGR%') 
+AND (Acct IN('11320406','11329003'))
+AND (Posted = 'P') 
+AND (CpnyID = 'AGQ')
+AND TranDate BETWEEN '20200220' AND '20200303'
+GROUP BY   ProjectID, Sub, Acct, TaskID
+union
+SELECT     
+          'DEPRESIACION',
+           Acct, 
+           Sub, 
+		   ProjectID,
+		   TaskID, 
+		   SUM(DrAmt) AS Cargos,
+		   SUM(CrAmt) AS Abonos,
+		   MAX(PerPost) AS Perpost
+FROM       dbo.GLTran WITH (nolock)  
+WHERE     (Sub LIKE 'PEENGR%') 
+AND (Acct IN('11320701','11329013'))
+AND (Posted = 'P') 
+AND (CpnyID = 'AGQ')
+AND TranDate BETWEEN '20200220' AND '20200303'
+GROUP BY   ProjectID, Sub, Acct, TaskID
