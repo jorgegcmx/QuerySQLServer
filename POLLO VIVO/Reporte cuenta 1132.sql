@@ -1,4 +1,6 @@
-SELECT    'DIESEL',
+
+CREATE VIEW view_reporte1132 AS
+SELECT    'DIESEL' as Concepto,
            Acct, 
            Sub, 
 		   ProjectID,
@@ -15,7 +17,7 @@ AND TranDate BETWEEN '20200220' AND '20200303'
 GROUP BY   ProjectID, Sub, Acct, TaskID
 union
 SELECT     
-          'GASOLINA',
+          'GASOLINA'as Concepto,
            Acct, 
            Sub, 
 		   ProjectID,
@@ -32,7 +34,7 @@ AND TranDate BETWEEN '20200220' AND '20200303'
 GROUP BY   ProjectID, Sub, Acct, TaskID
 union
 SELECT     
-          'ENERGIA ELECTRICA',
+          'ENERGIA ELECTRICA'as Concepto,
            Acct, 
            Sub, 
 		   ProjectID,
@@ -49,7 +51,7 @@ AND TranDate BETWEEN '20200220' AND '20200303'
 GROUP BY   ProjectID, Sub, Acct, TaskID
 union
 SELECT     
-          'ARRENDAMIENTO DE TERRENOS',
+          'ARRENDAMIENTO DE TERRENOS'as Concepto,
            Acct, 
            Sub, 
 		   ProjectID,
@@ -66,7 +68,7 @@ AND TranDate BETWEEN '20200220' AND '20200303'
 GROUP BY   ProjectID, Sub, Acct, TaskID
 union
 SELECT     
-          'DEPRESIACION',
+          'DEPRESIACION'as Concepto,
            Acct, 
            Sub, 
 		   ProjectID,
@@ -81,3 +83,4 @@ AND (Posted = 'P')
 AND (CpnyID = 'AGQ')
 AND TranDate BETWEEN '20200220' AND '20200303'
 GROUP BY   ProjectID, Sub, Acct, TaskID
+
