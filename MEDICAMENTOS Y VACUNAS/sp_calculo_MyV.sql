@@ -1,4 +1,4 @@
-ALTER proc SP_MVFinal  as
+alter proc SP_MVFinal  as
 SET NOCOUNT ON;
 insert into dbo.NuReporteFinalMV (Semana,FechaRQ,BatNbr,AreaSolic,PersonaSol,DivSolic,USer2,StatusRequi,StatusPartida,InvtID,DescrAbierta,DescrSL,
             UniDeMed,CantOrdBASE,DescrUser,Proyecto,FecReqDeEnt,FechaProm,VendorId,PoNbr,CantSurt,RegistroID,User7, MotivoRet,RegistroIDR)
@@ -67,13 +67,13 @@ Select  H.S4Future02 As Semana , H.Fecha as FechaRQ, H.BatNbr, H.AreaSolic, H.Pe
  
 
  
- update	 H set H.S4Future02=S.SemAno, H.MotivoRet='REORDEN' 		 
+ update	 H set H.S4Future02=S.SemAno, H.MotivoRet='REORDEN' 	 
  from nurqReqHdr H (nolock)    
  join nurqReqDet D (nolock) 
  on H.BatNbr = D.BatNbr
  join SemanasXAno S on H.Fecha between S.FechaInicial and S.FechaFinal 
  Where   D.InvtID in(select CodMedic from NuCatMedic)
- And H.User2 IN ('MEDYVAC') AND h.PersonaSol='AMORQUECHO'
+ And H.User2 in( 'MEDYVAC','QUIMICO','ARTLIMP')  AND h.PersonaSol='AMORQUECHO'
  AND Fecha>'20200201' 
  AND D.RegistroID not in (select distinct RegistroID from NuReporteFinalMV)
 
@@ -201,12 +201,19 @@ Select  H.S4Future02 As Semana , H.Fecha as FechaRQ, H.BatNbr, H.AreaSolic, H.Pe
  AND D.RegistroID=R.RegistroID
  WHERE LTRIM(R.Semana+''+R.MotivoRet) NOT IN (select * from nuCantImporte)      
 
-  /*COSTO AUTORIZADO*/
+  /*COSTO AUTORIZADO SOLO CUNADO AUN NO SE HA CUADRADO LA SEMANA*/
  update R set  R.UnitCostR=CostoAut,
 			   R.CostExtR=(CantOrdBASE * CostoAut) 
  from  NuReporteFinalMV R 
  inner join nuPresAutoDet D (nolock) on 
  D.ClaveArt=R.InvtID and  R.Semana=D.Semana AND LTRIM(R.Semana+''+R.MotivoRet) NOT IN (select * from nuCantImporte)
+
+ 
+  update R set  R.UnitCostR=CostoAut,
+			   R.CostExtR=(CantOrdBASE * CostoAut) 
+ from  NuReporteFinalMV R 
+ inner join nuPresAutoDet D (nolock) on 
+ D.ClaveArt=R.InvtID and  R.Semana=D.Semana WHERE MotivoRet IN ('EXPE','REORDEN') AND UnitCostR is null
 
 /*INSERTAMOS EL TIPO DE REQUI YA CUADRADO*/
 insert into  nuCantImporte
