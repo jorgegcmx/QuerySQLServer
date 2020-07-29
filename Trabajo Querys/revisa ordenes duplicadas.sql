@@ -1,4 +1,4 @@
-alter view VWdesorden as 
+create view VWdesorden as 
 select *  from   NuReporteFinalMV  where BatNbr not in (select )
 
 select * from VWdesorden where ORDEN in (

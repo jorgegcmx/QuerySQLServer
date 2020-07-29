@@ -1,43 +1,12 @@
-alter proc SP_MVFinal  as
+CREATE proc SP_MVFinal  as
 SET NOCOUNT ON;
-insert into dbo.NuReporteFinalMV (Semana,FechaRQ,BatNbr,AreaSolic,PersonaSol,DivSolic,USer2,StatusRequi,StatusPartida,InvtID,DescrAbierta,DescrSL,
-            UniDeMed,CantOrdBASE,DescrUser,Proyecto,FecReqDeEnt,FechaProm,VendorId,PoNbr,CantSurt,RegistroID,User7, MotivoRet,RegistroIDR)
-Select  H.S4Future02 As Semana , H.Fecha as FechaRQ, H.BatNbr, H.AreaSolic, H.PersonaSol,
-        H.DivSolic,    H.USer2,
-     Case When H.Status = 'U' Then 'Captura'
-     When H.Status = 'A' Then 'Autorizada'
-     When H.Status = 'P' Then 'Cerrada' 
-	 When H.Status = 'C' Then 'Abierta'  
-	 When H.Status = 'R' Then 'Retenida'
-	 When H.Status = 'N' Then 'Cancelada' 
-	 When H.Status = 'T' Then 'Abierta Parcialmente'  
-     End as StatusRequi,
-     Case When D.StatusPartida = 'U' Then 'Por Autorizar'
-     When D.StatusPartida = 'A' Then 'Autorizada'
-     When D.StatusPartida = 'P' Then 'Parcialmente Abierta' 
-	 When D.StatusPartida = 'C' Then 'Cerrada'  
-	 When D.StatusPartida = 'R' Then 'Rechazada'
-	 When D.StatusPartida = 'N' Then 'Cancelada' 
-	 When D.StatusPartida = 'S' Then 'Sin Presupuesto'   
-	 When D.StatusPartida = 'V' Then 'Presupuestado'      
-     End as StatusPartida, 
-            D.InvtID,      D.DescrAbierta,   D.DescrSL,         D.UniDeMed, 
-			D.CantOrdBASE, D.DescrUser,      D.Proyecto,        D.FecReqDeEnt,    D.FechaProm,
-			D.VendorId,    D.PoNbr,          D.CantSurt,        D.RegistroID,     D.User7, 
-		    H.MotivoRet, D.RegistroID as RegistroIDR				 
- from nurqReqHdr H (nolock)    
- join nurqReqDet D (nolock) 
- on H.BatNbr = D.BatNbr 
- Where H.S4Future02 <>'' and D.RegistroID not in (select distinct RegistroID from NuReporteFinalMV)
- And H.DivSolic ='PE' And H.User2 in( 'MEDYVAC','QUIMICO','ARTLIMP') 
- And H.MotivoRet IN ('PRPE','MSPE')
- AND D.User45=1
+insert into dbo.NuReporteFinalMV
+	(Semana,FechaRQ,BatNbr,AreaSolic,PersonaSol,DivSolic,USer2,StatusRequi,StatusPartida,InvtID,DescrAbierta,DescrSL,
+	UniDeMed,CantOrdBASE,DescrUser,Proyecto,FecReqDeEnt,FechaProm,VendorId,PoNbr,CantSurt,RegistroID,User7, MotivoRet,RegistroIDR)
 
-insert into dbo.NuReporteFinalMV (Semana,FechaRQ,BatNbr,AreaSolic,PersonaSol,DivSolic,USer2,StatusRequi,StatusPartida,InvtID,DescrAbierta,DescrSL,
-            UniDeMed,CantOrdBASE,DescrUser,Proyecto,FecReqDeEnt,FechaProm,VendorId,PoNbr,CantSurt,RegistroID,User7, MotivoRet,RegistroIDR)
-Select  H.S4Future02 As Semana , H.Fecha as FechaRQ, H.BatNbr, H.AreaSolic, H.PersonaSol,
-        H.DivSolic,    H.USer2,
-     Case When H.Status = 'U' Then 'Captura'
+Select H.S4Future02 As Semana , H.Fecha as FechaRQ, H.BatNbr, H.AreaSolic, H.PersonaSol,
+	H.DivSolic, H.USer2,
+	Case When H.Status = 'U' Then 'Captura'
      When H.Status = 'A' Then 'Autorizada'
      When H.Status = 'P' Then 'Cerrada' 
 	 When H.Status = 'C' Then 'Abierta'  
@@ -45,7 +14,7 @@ Select  H.S4Future02 As Semana , H.Fecha as FechaRQ, H.BatNbr, H.AreaSolic, H.Pe
 	 When H.Status = 'N' Then 'Cancelada' 
 	 When H.Status = 'T' Then 'Abierta Parcialmente'  
      End as StatusRequi,
-     Case When D.StatusPartida = 'U' Then 'Por Autorizar'
+	Case When D.StatusPartida = 'U' Then 'Por Autorizar'
      When D.StatusPartida = 'A' Then 'Autorizada'
      When D.StatusPartida = 'P' Then 'Parcialmente Abierta' 
 	 When D.StatusPartida = 'C' Then 'Cerrada'  
@@ -53,38 +22,78 @@ Select  H.S4Future02 As Semana , H.Fecha as FechaRQ, H.BatNbr, H.AreaSolic, H.Pe
 	 When D.StatusPartida = 'N' Then 'Cancelada' 
 	 When D.StatusPartida = 'S' Then 'Sin Presupuesto'   
 	 When D.StatusPartida = 'V' Then 'Presupuestado'      
-     End as StatusPartida, 
-            D.InvtID,      D.DescrAbierta,   D.DescrSL,         D.UniDeMed, 
-			D.CantOrdBASE, D.DescrUser,      D.Proyecto,        D.FecReqDeEnt,    D.FechaProm,
-			D.VendorId,    D.PoNbr,          D.CantSurt,        D.RegistroID,     D.User7, 
-		    H.MotivoRet, D.RegistroID as RegistroIDR				 
- from nurqReqHdr H (nolock)    
- join nurqReqDet D (nolock) 
- on H.BatNbr = D.BatNbr 
- Where H.S4Future02 <>'' and D.RegistroID not in (select distinct RegistroID from NuReporteFinalMV)
- And H.DivSolic ='PE' And H.User2 in( 'MEDYVAC','QUIMICO','ARTLIMP') 
- And H.MotivoRet IN ('EXPE')
+     End as StatusPartida,
+	D.InvtID, D.DescrAbierta, D.DescrSL, D.UniDeMed,
+	D.CantOrdBASE, D.DescrUser, D.Proyecto, D.FecReqDeEnt, D.FechaProm,
+	D.VendorId, D.PoNbr, D.CantSurt, D.RegistroID, D.User7,
+	H.MotivoRet, D.RegistroID as RegistroIDR
+from nurqReqHdr H (nolock)
+	join nurqReqDet D (nolock)
+	on H.BatNbr = D.BatNbr
+Where H.S4Future02 <>'' and D.RegistroID not in (select distinct RegistroID
+	from NuReporteFinalMV)
+	And H.DivSolic ='PE' And H.User2 in( 'MEDYVAC','QUIMICO','ARTLIMP')
+	And H.MotivoRet IN ('PRPE','MSPE')
+	AND D.User45=1
+
+insert into dbo.NuReporteFinalMV
+	(Semana,FechaRQ,BatNbr,AreaSolic,PersonaSol,DivSolic,USer2,StatusRequi,StatusPartida,InvtID,DescrAbierta,DescrSL,
+	UniDeMed,CantOrdBASE,DescrUser,Proyecto,FecReqDeEnt,FechaProm,VendorId,PoNbr,CantSurt,RegistroID,User7, MotivoRet,RegistroIDR)
+Select H.S4Future02 As Semana , H.Fecha as FechaRQ, H.BatNbr, H.AreaSolic, H.PersonaSol,
+	H.DivSolic, H.USer2,
+	Case When H.Status = 'U' Then 'Captura'
+     When H.Status = 'A' Then 'Autorizada'
+     When H.Status = 'P' Then 'Cerrada' 
+	 When H.Status = 'C' Then 'Abierta'  
+	 When H.Status = 'R' Then 'Retenida'
+	 When H.Status = 'N' Then 'Cancelada' 
+	 When H.Status = 'T' Then 'Abierta Parcialmente'  
+     End as StatusRequi,
+	Case When D.StatusPartida = 'U' Then 'Por Autorizar'
+     When D.StatusPartida = 'A' Then 'Autorizada'
+     When D.StatusPartida = 'P' Then 'Parcialmente Abierta' 
+	 When D.StatusPartida = 'C' Then 'Cerrada'  
+	 When D.StatusPartida = 'R' Then 'Rechazada'
+	 When D.StatusPartida = 'N' Then 'Cancelada' 
+	 When D.StatusPartida = 'S' Then 'Sin Presupuesto'   
+	 When D.StatusPartida = 'V' Then 'Presupuestado'      
+     End as StatusPartida,
+	D.InvtID, D.DescrAbierta, D.DescrSL, D.UniDeMed,
+	D.CantOrdBASE, D.DescrUser, D.Proyecto, D.FecReqDeEnt, D.FechaProm,
+	D.VendorId, D.PoNbr, D.CantSurt, D.RegistroID, D.User7,
+	H.MotivoRet, D.RegistroID as RegistroIDR
+from nurqReqHdr H (nolock)
+	join nurqReqDet D (nolock)
+	on H.BatNbr = D.BatNbr
+Where H.S4Future02 <>'' and D.RegistroID not in (select distinct RegistroID
+	from NuReporteFinalMV)
+	And H.DivSolic ='PE' And H.User2 in( 'MEDYVAC','QUIMICO','ARTLIMP')
+	And H.MotivoRet IN ('EXPE')
  
 
  
- update	 H set H.S4Future02=S.SemAno, H.MotivoRet='REORDEN' 	 
- from nurqReqHdr H (nolock)    
- join nurqReqDet D (nolock) 
- on H.BatNbr = D.BatNbr
- join SemanasXAno S on H.Fecha between S.FechaInicial and S.FechaFinal 
- Where   D.InvtID in(select CodMedic from NuCatMedic)
- --And H.User2 in( 'MEDYVAC','QUIMICO','ARTLIMP','')  
- AND h.PersonaSol in('AMORQUECHO','REORDEN')
- AND Fecha>'20200201' 
- AND D.RegistroID not in (select distinct RegistroID from NuReporteFinalMV)
- AND H.MotivoRet is null
+
+update	 H set H.S4Future02=S.SemAno, H.MotivoRet='REORDEN' 	 
+ from nurqReqHdr H (nolock)
+	join nurqReqDet D (nolock)
+	on H.BatNbr = D.BatNbr
+	join SemanasXAno S on H.Fecha between S.FechaInicial and S.FechaFinal 
+ Where   D.InvtID in(select CodMedic
+	from NuCatMedic)
+	--And H.User2 in( 'MEDYVAC','QUIMICO','ARTLIMP','')  
+	AND h.PersonaSol in('AMORQUECHO','REORDEN')
+	AND Fecha>'20200201'
+	AND D.RegistroID not in (select distinct RegistroID
+	from NuReporteFinalMV)
+	AND H.MotivoRet is null
 
 
- insert into dbo.NuReporteFinalMV (Semana,FechaRQ,BatNbr,AreaSolic,PersonaSol,DivSolic,USer2,StatusRequi,StatusPartida,InvtID,DescrAbierta,DescrSL,
-            UniDeMed,CantOrdBASE,DescrUser,Proyecto,FecReqDeEnt,FechaProm,VendorId,PoNbr,CantSurt,RegistroID,User7, MotivoRet,RegistroIDR)
- Select  H.S4Future02 As Semana , H.Fecha as FechaRQ, H.BatNbr, H.AreaSolic, H.PersonaSol,
-        H.DivSolic,    H.USer2,
-     Case When H.Status = 'U' Then 'Captura'
+ insert into dbo.NuReporteFinalMV
+	(Semana,FechaRQ,BatNbr,AreaSolic,PersonaSol,DivSolic,USer2,StatusRequi,StatusPartida,InvtID,DescrAbierta,DescrSL,
+	UniDeMed,CantOrdBASE,DescrUser,Proyecto,FecReqDeEnt,FechaProm,VendorId,PoNbr,CantSurt,RegistroID,User7, MotivoRet,RegistroIDR)
+Select H.S4Future02 As Semana , H.Fecha as FechaRQ, H.BatNbr, H.AreaSolic, H.PersonaSol,
+	H.DivSolic, H.USer2,
+	Case When H.Status = 'U' Then 'Captura'
      When H.Status = 'A' Then 'Autorizada'
      When H.Status = 'P' Then 'Cerrada' 
 	 When H.Status = 'C' Then 'Abierta'  
@@ -92,7 +101,7 @@ Select  H.S4Future02 As Semana , H.Fecha as FechaRQ, H.BatNbr, H.AreaSolic, H.Pe
 	 When H.Status = 'N' Then 'Cancelada' 
 	 When H.Status = 'T' Then 'Abierta Parcialmente'  
      End as StatusRequi,
-     Case When D.StatusPartida = 'U' Then 'Por Autorizar'
+	Case When D.StatusPartida = 'U' Then 'Por Autorizar'
      When D.StatusPartida = 'A' Then 'Autorizada'
      When D.StatusPartida = 'P' Then 'Parcialmente Abierta' 
 	 When D.StatusPartida = 'C' Then 'Cerrada'  
@@ -100,24 +109,27 @@ Select  H.S4Future02 As Semana , H.Fecha as FechaRQ, H.BatNbr, H.AreaSolic, H.Pe
 	 When D.StatusPartida = 'N' Then 'Cancelada' 
 	 When D.StatusPartida = 'S' Then 'Sin Presupuesto'   
 	 When D.StatusPartida = 'V' Then 'Presupuestado'      
-     End as StatusPartida, 
-            D.InvtID,      D.DescrAbierta,   D.DescrSL,         D.UniDeMed, 
-			D.CantOrdBASE, D.DescrUser,      D.Proyecto,        D.FecReqDeEnt,    D.FechaProm,
-			D.VendorId,    D.PoNbr,          D.CantSurt,        D.RegistroID,     D.User7, 
-		    H.MotivoRet, D.RegistroID as RegistroIDR				 
- from nurqReqHdr H (nolock)    
- join nurqReqDet D (nolock) 
- on H.BatNbr = D.BatNbr 
- Where H.S4Future02 <>'' and D.RegistroID not in (select distinct RegistroID from NuReporteFinalMV) 
- and D.InvtID in(select CodMedic from NuCatMedic)
- And H.MotivoRet IN ('REORDEN')
+     End as StatusPartida,
+	D.InvtID, D.DescrAbierta, D.DescrSL, D.UniDeMed,
+	D.CantOrdBASE, D.DescrUser, D.Proyecto, D.FecReqDeEnt, D.FechaProm,
+	D.VendorId, D.PoNbr, D.CantSurt, D.RegistroID, D.User7,
+	H.MotivoRet, D.RegistroID as RegistroIDR
+from nurqReqHdr H (nolock)
+	join nurqReqDet D (nolock)
+	on H.BatNbr = D.BatNbr
+Where H.S4Future02 <>'' and D.RegistroID not in (select distinct RegistroID
+	from NuReporteFinalMV)
+	and D.InvtID in(select CodMedic
+	from NuCatMedic)
+	And H.MotivoRet IN ('REORDEN')
 
  
- insert into dbo.NuReporteFinalMV (Semana,FechaRQ,BatNbr,AreaSolic,PersonaSol,DivSolic,USer2,StatusRequi,StatusPartida,InvtID,DescrAbierta,DescrSL,
-            UniDeMed,CantOrdBASE,DescrUser,Proyecto,FecReqDeEnt,FechaProm,VendorId,PoNbr,CantSurt,RegistroID,User7, MotivoRet,RegistroIDR)
- Select  S.SemAno As Semana , H.Fecha as FechaRQ, H.BatNbr, H.AreaSolic, H.PersonaSol,
-        H.DivSolic,    H.USer2,
-     Case When H.Status = 'U' Then 'Captura'
+ insert into dbo.NuReporteFinalMV
+	(Semana,FechaRQ,BatNbr,AreaSolic,PersonaSol,DivSolic,USer2,StatusRequi,StatusPartida,InvtID,DescrAbierta,DescrSL,
+	UniDeMed,CantOrdBASE,DescrUser,Proyecto,FecReqDeEnt,FechaProm,VendorId,PoNbr,CantSurt,RegistroID,User7, MotivoRet,RegistroIDR)
+Select S.SemAno As Semana , H.Fecha as FechaRQ, H.BatNbr, H.AreaSolic, H.PersonaSol,
+	H.DivSolic, H.USer2,
+	Case When H.Status = 'U' Then 'Captura'
      When H.Status = 'A' Then 'Autorizada'
      When H.Status = 'P' Then 'Cerrada' 
 	 When H.Status = 'C' Then 'Abierta'  
@@ -125,7 +137,7 @@ Select  H.S4Future02 As Semana , H.Fecha as FechaRQ, H.BatNbr, H.AreaSolic, H.Pe
 	 When H.Status = 'N' Then 'Cancelada' 
 	 When H.Status = 'T' Then 'Abierta Parcialmente'  
      End as StatusRequi,
-     Case When D.StatusPartida = 'U' Then 'Por Autorizar'
+	Case When D.StatusPartida = 'U' Then 'Por Autorizar'
      When D.StatusPartida = 'A' Then 'Autorizada'
      When D.StatusPartida = 'P' Then 'Parcialmente Abierta' 
 	 When D.StatusPartida = 'C' Then 'Cerrada'  
@@ -133,33 +145,37 @@ Select  H.S4Future02 As Semana , H.Fecha as FechaRQ, H.BatNbr, H.AreaSolic, H.Pe
 	 When D.StatusPartida = 'N' Then 'Cancelada' 
 	 When D.StatusPartida = 'S' Then 'Sin Presupuesto'   
 	 When D.StatusPartida = 'V' Then 'Presupuestado'      
-     End as StatusPartida, 
-            D.InvtID,      D.DescrAbierta,   D.DescrSL,         D.UniDeMed, 
-			D.CantOrdBASE, D.DescrUser,      D.Proyecto,        D.FecReqDeEnt,    D.FechaProm,
-			D.VendorId,    D.PoNbr,          D.CantSurt,        D.RegistroID,     D.User7, 
-		    H.MotivoRet, D.RegistroID as RegistroIDR				 
- from nurqReqHdr H (nolock)    
- join nurqReqDet D (nolock) 
- on H.BatNbr = D.BatNbr
- join SemanasXAno S on H.Fecha between S.FechaInicial and S.FechaFinal 
- Where H.S4Future02 <>'' and D.RegistroID not in (select distinct RegistroID from NuReporteFinalMV) 
- and D.InvtID in(select CodMedic from NuCatMedic)
- And H.User2 IN ('MEDYVAC') AND h.PersonaSol='AMORQUECHO'
+     End as StatusPartida,
+	D.InvtID, D.DescrAbierta, D.DescrSL, D.UniDeMed,
+	D.CantOrdBASE, D.DescrUser, D.Proyecto, D.FecReqDeEnt, D.FechaProm,
+	D.VendorId, D.PoNbr, D.CantSurt, D.RegistroID, D.User7,
+	H.MotivoRet, D.RegistroID as RegistroIDR
+from nurqReqHdr H (nolock)
+	join nurqReqDet D (nolock)
+	on H.BatNbr = D.BatNbr
+	join SemanasXAno S on H.Fecha between S.FechaInicial and S.FechaFinal
+Where H.S4Future02 <>'' and D.RegistroID not in (select distinct RegistroID
+	from NuReporteFinalMV)
+	and D.InvtID in(select CodMedic
+	from NuCatMedic)
+	And H.User2 IN ('MEDYVAC') AND h.PersonaSol='AMORQUECHO'
 
 
 
 
  /*SEMANA SI ES QUE CAMBIA*/
- update R set  R.Semana=H.S4Future02 
- from  NuReporteFinalMV R 
- inner join nurqReqHdr H (nolock) 
- on R.BatNbr=H.BatNbr  where  R.Semana<>H.S4Future02  
+
+update R set  R.Semana=H.S4Future02 
+ from NuReporteFinalMV R
+	inner join nurqReqHdr H (nolock)
+	on R.BatNbr=H.BatNbr  where  R.Semana<>H.S4Future02  
 
   /*SI CAMBIA EL MOTIVO DE LA REQUI*/
- update R set  R.MotivoRet=H.MotivoRet  
- from  NuReporteFinalMV R 
- inner join nurqReqHdr H (nolock) 
- on R.BatNbr=H.BatNbr  where  R.MotivoRet<>H.MotivoRet  
+
+update R set  R.MotivoRet=H.MotivoRet  
+ from NuReporteFinalMV R
+	inner join nurqReqHdr H (nolock)
+	on R.BatNbr=H.BatNbr  where  R.MotivoRet<>H.MotivoRet  
 
  
    /*ESTATUS REQUI HEADER */
@@ -172,9 +188,9 @@ Select  H.S4Future02 As Semana , H.Fecha as FechaRQ, H.BatNbr, H.AreaSolic, H.Pe
 	 When H.Status = 'N' Then 'Cancelada' 
 	 When H.Status = 'T' Then 'Abierta Parcialmente'  
      End	  
- from  NuReporteFinalMV R 
- inner join nurqReqHdr H (nolock) 
- on R.BatNbr=H.BatNbr 
+ from NuReporteFinalMV R
+	inner join nurqReqHdr H (nolock)
+	on R.BatNbr=H.BatNbr 
 
 
 
@@ -189,33 +205,36 @@ Select  H.S4Future02 As Semana , H.Fecha as FechaRQ, H.BatNbr, H.AreaSolic, H.Pe
 	 When D.StatusPartida = 'S' Then 'Sin Presupuesto'   
 	 When D.StatusPartida = 'V' Then 'Presupuestado'      
      End  	  
- from  NuReporteFinalMV R 
- inner join nurqReqDet D (nolock) 
- on R.BatNbr=D.BatNbr
-  AND D.RegistroID=R.RegistroID
+ from NuReporteFinalMV R
+	inner join nurqReqDet D (nolock)
+	on R.BatNbr=D.BatNbr
+		AND D.RegistroID=R.RegistroID
 
 
  /*CANTIDAAD DE ARTICULOS*/
  update R set  R.CantOrdBASE=D.CantOrdBASE 
- from  NuReporteFinalMV R 
- inner join nurqReqDet D (nolock) 
- on R.BatNbr=D.BatNbr 
- AND D.RegistroID=R.RegistroID
- WHERE LTRIM(R.Semana+''+R.MotivoRet) NOT IN (select * from nuCantImporte)      
+ from NuReporteFinalMV R
+	inner join nurqReqDet D (nolock)
+	on R.BatNbr=D.BatNbr
+		AND D.RegistroID=R.RegistroID
+ WHERE LTRIM(R.Semana+''+R.MotivoRet) NOT IN (select *
+from nuCantImporte)      
 
   /*COSTO AUTORIZADO SOLO CUNADO AUN NO SE HA CUADRADO LA SEMANA*/
- update R set  R.UnitCostR=CostoAut,
-			   R.CostExtR=(CantOrdBASE * CostoAut) 
- from  NuReporteFinalMV R 
- inner join nuPresAutoDet D (nolock) on 
- D.ClaveArt=R.InvtID and  R.Semana=D.Semana AND LTRIM(R.Semana+''+R.MotivoRet) NOT IN (select * from nuCantImporte)
 
- 
-  update R set  R.UnitCostR=CostoAut,
+update R set  R.UnitCostR=CostoAut,
 			   R.CostExtR=(CantOrdBASE * CostoAut) 
- from  NuReporteFinalMV R 
- inner join nuPresAutoDet D (nolock) on 
- D.ClaveArt=R.InvtID and  R.Semana=D.Semana WHERE MotivoRet IN ('EXPE','REORDEN') AND UnitCostR is null
+ from NuReporteFinalMV R
+	inner join nuPresAutoDet D (nolock) on 
+ D.ClaveArt=R.InvtID and R.Semana=D.Semana AND LTRIM(R.Semana+''+R.MotivoRet) NOT IN (select *
+		from nuCantImporte)
+
+
+update R set  R.UnitCostR=CostoAut,
+			   R.CostExtR=(CantOrdBASE * CostoAut) 
+ from NuReporteFinalMV R
+	inner join nuPresAutoDet D (nolock) on 
+ D.ClaveArt=R.InvtID and R.Semana=D.Semana WHERE MotivoRet IN ('EXPE','REORDEN') AND UnitCostR is null
 
 /*INSERTAMOS EL TIPO DE REQUI YA CUADRADO*/
 insert into  nuCantImporte
@@ -224,7 +243,8 @@ select distinct LTRIM(Semana+''+MotivoRet)as SemanaTipo from NuReporteFinalMV wh
 --select * from nuCantImporte
 /* DATOS DE SIN REQUI PADRE*/
 
- update R set     ORDEN =D.PONbr,
+
+update R set     ORDEN =D.PONbr,
 			      CLAVEPROV=vendid,
 			      InvtOC=D.InvtID,			     
 			      CantOC=D.QtyOrd,
@@ -232,18 +252,19 @@ select distinct LTRIM(Semana+''+MotivoRet)as SemanaTipo from NuReporteFinalMV wh
 			      extCostOC=D.extcost,
 				  ImpoteDOC=H.PoAmt
 
- from  NuReporteFinalMV R 
- inner join purorddet D (nolock) on 
-  D.User1=R.BatNbr 
- inner join purchord H (nolock) on
+ from NuReporteFinalMV R
+	inner join purorddet D (nolock) on 
+  D.User1=R.BatNbr
+	inner join purchord H (nolock) on
  H.PONbr=D.PONbr
- and R.RegistroID=D.User3
- and H.Status<>'X'
+		and R.RegistroID=D.User3
+		and H.Status<>'X'
 
 
 
  /* DATOS DE REQUI PADRE*/
- update R set     ORDEN =D.PONbr,
+
+update R set     ORDEN =D.PONbr,
 			      CLAVEPROV=vendid,
 			      InvtOC=D.InvtID,			     
 			      CantOC=D.QtyOrd,
@@ -251,17 +272,16 @@ select distinct LTRIM(Semana+''+MotivoRet)as SemanaTipo from NuReporteFinalMV wh
 			      extCostOC=D.ExtCost,
 				  ImpoteDOC=H.PoAmt  
                   FROM NuReporteFinalMV R   (NOLOCK)
-                                  inner join nurqReqDetOrVsPa ORD (NOLOCK)
-								  on convert(int,R.RegistroID) = ORD.RegistroIDOr    
-	                              and R.BatNbr= ORD.BatNbrOr
-								  inner join purorddet D (nolock) on 
-                                  D.User1=ORD.BatNbrPadre 
-                                  inner join purchord H (nolock) on
-                                  H.PONbr=D.PONbr
-                                  and ORD.RegistroIDPadre=D.User3
-								  and R.InvtID=D.InvtID
-								  where H.Status<>'X'
-								 
+	inner join nurqReqDetOrVsPa ORD (NOLOCK)
+	on convert(int,R.RegistroID) = ORD.RegistroIDOr
+		and R.BatNbr= ORD.BatNbrOr
+	inner join purorddet D (nolock) on 
+         D.User1=ORD.BatNbrPadre
+	inner join purchord H (nolock) on
+           H.PONbr=D.PONbr
+		and ORD.RegistroIDPadre=D.User3
+		and R.InvtID=D.InvtID
+		where H.Status<>'X'							 
 
 	
 					  
@@ -285,7 +305,7 @@ update R set
 		 R.CantPV=AP.qty,
 		 R.UniCostPV=Ap.unitprice,
 		 R.extCostPV=tranamt
---select A.*,B.Module,A.DocType
+--select A.*
 from NuReporteFinalMV R (nolock)
 inner join APDoc A (nolock)
 on A.PONbr=R.ORDEN
@@ -293,12 +313,11 @@ inner join batch B (nolock)
 on A.BatNbr=B.BatNbr 
 inner join aptran AP (nolock)
  on AP.BatNbr=A.BatNbr 
---and R.InvtOC=AP.InvtID	
+and R.InvtOC=AP.InvtID	
 where R.ORDEN IS NOT NULL AND R.PoNbr <>'PARCIAL' 
 --and  A.Status='P'
---and A.RefNbr in ('0000219750')
-and B.Module='AP' 
---and A.DocType='VO'
+--and R.Referencia_PASIVO in ('0000206176')
+and B.Module='AP' and A.DocType='VO'
 
 
 update R set R.NombreProveedor=Name
@@ -317,10 +336,22 @@ where R.NombreProveedor=''
  from NuReporteFinalMV R (nolock)
  inner join APAdjust A (nolock)
  on A.AdjdRefNbr=R.Referencia_PASIVO 
- where  --AdjdRefNbr = '0000204798' and  
+ where -- AdjdRefNbr = '0000195298' and  
  AdjgAcct <>'11104400'
 
- 
+ /*
+ UPDATE R SET 
+ Lote_cheque=A.AdjBatNbr,
+ Referancia_cheque=A.AdjdRefNbr,
+ ImportePago=A.AdjAmt,
+ CuentaPago=a.AdjgAcct
+ --select A.*
+ from NuReporteFinalMV R (nolock)
+ inner join APAdjust A (nolock)
+ on A.AdjdRefNbr=R.Referencia_PASIVO 
+ where   AdjdRefNbr = '0000195298' and   
+ AdjgAcct ='11104400' */
+
 
 
  /*DATOS IMPORTE USD */
@@ -337,11 +368,20 @@ where R.NombreProveedor=''
  
  UPDATE R SET
  R.ImpoteCXP=A.AdjAmt
+ --select A.*
  from NuReporteFinalMV R (nolock)
  inner join APAdjust A (nolock)
  on A.AdjdRefNbr=R.Referencia_PASIVO
- inner join APDoc AP on AP.RefNbr=A.AdjgRefNbr
- where  a.AdjgAcct='11104400' and AP.S4Future01='A' 
+ inner join APDoc AP on AP.RefNbr=A.AdjdRefNbr
+ where  a.AdjgAcct='11104400' --and AP.S4Future01='A' 
+ --and A.AdjdRefNbr='0000209547'
+
+
+
+ UPDATE R SET
+ R.ImpoteCXP=0
+ from NuReporteFinalMV R (nolock) 
+ where   R.ImpoteCXP is null 
 
 
  
@@ -382,6 +422,32 @@ update R set  R.semanaPago=A.SemAno
 From NuReporteFinalMV R	(nolock)					
                 inner join SemanasXAno  A	(nolock)	
 				on R.Fecha between A.FechaInicial and A.FechaFinal
+
+
+
+update R set  R.semanaPago=A.SemAno 
+From NuReporteFinalMV R	(nolock)					
+                inner join SemanasXAno  A	(nolock)	
+				on R.Fecha between A.FechaInicial and A.FechaFinal
+
+
+/*Nuevas Funciones*/
+update R set R.SaldoEnPasivo=A.DocBal 
+--select R.SaldoEnPasivo,A.CuryDocBal,A.DocBal 
+from NuReporteFinalMV R (nolock)
+inner join apdoc A on A.RefNbr=R.Referencia_PASIVO --where  RefNbr='0000223091' 
+
+update R set R.Moneda=A.CuryId
+from NuReporteFinalMV R (nolock)
+inner join apdoc A on A.RefNbr=R.Referencia_PASIVO
+
+
+update R set R.DifTipoCambio=A.CuryRGOLAmt
+from NuReporteFinalMV R (nolock)
+inner join APAdjust A on A.AdjdRefNbr=R.Referencia_PASIVO
+
+update  NuReporteFinalMV set ImportePago=0
+where   ImportePago=ImpoteCXP	
 
 
 --select * from NuReporteFinalMV 

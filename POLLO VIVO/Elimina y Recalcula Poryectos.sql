@@ -1,9 +1,12 @@
-DECLARE @proyecto varchar(25) 
+ 
+DECLARE @proyecto varchar(25) =''
+
+delete from nupeReporteMasterHeader  where  ProyectID =@proyecto
+delete  from nupeCostCasCerr  where  Proyecto  =@proyecto
+
   
 DECLARE nupeCurLlenadoModulo CURSOR FOR  
-
-select  'PE202003HA0101'
-
+select  @proyecto
 
 OPEN nupeCurLlenadoModulo     
 FETCH NEXT FROM nupeCurLlenadoModulo      
@@ -31,8 +34,10 @@ END
 CLOSE nupeCurLlenadoModulo;    
 DEALLOCATE nupeCurLlenadoModulo; 
 
+/*Ajustes de importe trans no contempladas*/
+select *  from nupeCostCasCerr where Proyecto='PE202003CG0207' and Grupo like '8%' and Importe>6
 
-select * delete from nupeCostCasCerr where Proyecto='PE202003CG0207' and Grupo like '8%' and Importe>6
+
 
 
 
