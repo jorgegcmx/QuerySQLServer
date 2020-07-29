@@ -73,9 +73,11 @@ Select  H.S4Future02 As Semana , H.Fecha as FechaRQ, H.BatNbr, H.AreaSolic, H.Pe
  on H.BatNbr = D.BatNbr
  join SemanasXAno S on H.Fecha between S.FechaInicial and S.FechaFinal 
  Where   D.InvtID in(select CodMedic from NuCatMedic)
- And H.User2 in( 'MEDYVAC','QUIMICO','ARTLIMP')  AND h.PersonaSol='AMORQUECHO'
+ --And H.User2 in( 'MEDYVAC','QUIMICO','ARTLIMP','')  
+ AND h.PersonaSol in('AMORQUECHO','REORDEN')
  AND Fecha>'20200201' 
  AND D.RegistroID not in (select distinct RegistroID from NuReporteFinalMV)
+ AND H.MotivoRet is null
 
 
  insert into dbo.NuReporteFinalMV (Semana,FechaRQ,BatNbr,AreaSolic,PersonaSol,DivSolic,USer2,StatusRequi,StatusPartida,InvtID,DescrAbierta,DescrSL,
@@ -283,7 +285,7 @@ update R set
 		 R.CantPV=AP.qty,
 		 R.UniCostPV=Ap.unitprice,
 		 R.extCostPV=tranamt
---select A.*
+--select A.*,B.Module,A.DocType
 from NuReporteFinalMV R (nolock)
 inner join APDoc A (nolock)
 on A.PONbr=R.ORDEN
@@ -291,11 +293,12 @@ inner join batch B (nolock)
 on A.BatNbr=B.BatNbr 
 inner join aptran AP (nolock)
  on AP.BatNbr=A.BatNbr 
-and R.InvtOC=AP.InvtID	
+--and R.InvtOC=AP.InvtID	
 where R.ORDEN IS NOT NULL AND R.PoNbr <>'PARCIAL' 
 --and  A.Status='P'
---and R.Referencia_PASIVO in ('0000206176')
-and B.Module='AP' and A.DocType='VO'
+--and A.RefNbr in ('0000219750')
+and B.Module='AP' 
+--and A.DocType='VO'
 
 
 update R set R.NombreProveedor=Name
